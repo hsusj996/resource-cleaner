@@ -1,0 +1,31 @@
+// resource.h - sample for MFC-like app (only numeric defines to match the cleaner regex)
+#pragma once
+
+#define IDS_APP_TITLE        100
+#define IDS_HELLO            101
+#define IDD_MAIN_DIALOG      102
+#define IDD_ABOUTBOX         103
+#define IDM_ABOUT            104
+#define IDM_EXIT             105
+#define IDI_APPICON          106
+#define IDR_MAINMENU         107
+#define IDC_BTN_OK           108
+#define IDC_STATIC_TEXT      109
+#define IDR_ACCEL            110
+#define IDC_SAMPLEAPP        111
+
+// Unused items (should be removed by the tool)
+#define IDD_UNUSED1          120
+#define IDD_UNUSED2          121
+#define IDM_UNUSED_CMD1      122
+#define IDM_UNUSED_CMD2      123
+#define IDR_UNUSED_ACCEL     124
+#define IDR_UNUSED_TOOLBAR   125
+#define IDS_UNUSED_STRING    126
+#define IDS_UNUSED_TIP       127
+#define IDC_UNUSED_EDIT      128
+#define IDC_UNUSED_LIST      129
+#define IDC_UNUSED_COMBO     130
+#define IDB_UNUSED_BITMAP    131
+#define IDI_UNUSED_ICON      132
+#define IDP_UNUSED_PROMPT    133

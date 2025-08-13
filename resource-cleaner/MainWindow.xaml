@@ -1,0 +1,114 @@
+﻿<Window x:Class="ResourceCleaner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MFC Resource Cleaner" Height="680" Width="1080"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="10,6"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+        </Style>
+
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 경로/버튼 -->
+        <DockPanel Grid.Row="0" LastChildFill="True" Margin="8">
+            <TextBlock Text="Root Path:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <TextBox Text="{Binding RootPath, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="폴더 선택" DockPanel.Dock="Right" Command="{Binding BrowseCommand}" />
+        </DockPanel>
+
+        <!-- 실행 컨트롤 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8">
+            <Button Content="분석 (Dry-run)" Command="{Binding AnalyzeCommand}" 
+                    IsEnabled="{Binding IsNotBusy}" />
+            <Button Content="적용 (Apply)" Command="{Binding ApplyCommand}" 
+                    IsEnabled="{Binding IsNotBusy}" />
+            <Button Content="resource.h 열기" Command="{Binding OpenResourceHeaderCommand}" />
+            <Button Content="백업 열기" Command="{Binding OpenBackupCommand}" 
+                    IsEnabled="{Binding HasBackup}" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
+                <TextBlock Text="Status: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 결과 탭 -->
+        <TabControl Grid.Row="2" Margin="8">
+            <TabItem Header="Before (사용 여부 스캔)">
+                <DataGrid ItemsSource="{Binding DefinesBefore}" 
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Old Value" Binding="{Binding OldValue}" Width="120"/>
+                        <DataGridCheckBoxColumn Header="Used" Binding="{Binding Used}" Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="After (재번호 미리보기)">
+                <DataGrid ItemsSource="{Binding DefinesAfter}" 
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="New Value" Binding="{Binding NewValue}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
+        <!-- 하단 요약 -->
+        <Border Grid.Row="3" Margin="8" Padding="10" BorderBrush="#DDD" BorderThickness="1" CornerRadius="6">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                <TextBlock Text="resource.h: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding ResourceHeaderPath}" Margin="6,0,16,0"/>
+                <TextBlock Text="전체: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding TotalDefines}" Margin="6,0,16,0"/>
+                <TextBlock Text="제거: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding RemovedDefines}" Margin="6,0,16,0"/>
+                <TextBlock Text="유지: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding KeptDefines}" Margin="6,0,16,0"/>
+                <TextBlock Text="백업: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding BackupPath}" Margin="6,0,16,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Busy Overlay -->
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="43*"/>
+                <ColumnDefinition Width="1037*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <SolidColorBrush Opacity="0.35" Color="Black"/>
+            </Grid.Background>
+            <Border CornerRadius="10" Background="White" Padding="20" Width="320" Height="120"
+                    HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="337,0,0,0" >
+                <StackPanel>
+                    <TextBlock Text="작업 중..." FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                    <ProgressBar IsIndeterminate="True" Margin="0,14,0,0" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

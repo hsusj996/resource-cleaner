@@ -1,0 +1,52 @@
+\
+#include "resource.h"
+
+// --- Icons & cursors (files don't need to exist for the cleaner to test usages) ---
+IDI_APPICON        ICON        "app.ico"
+IDC_SAMPLEAPP      CURSOR      "arrow.cur"
+
+// --- Main menu ---
+IDR_MAINMENU MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",      IDM_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About...",  IDM_ABOUT
+    END
+END
+
+// --- Accelerators ---
+IDR_ACCEL ACCELERATORS
+BEGIN
+    "?", IDM_ABOUT, VIRTKEY, ALT
+    "X", IDM_EXIT,  VIRTKEY, CONTROL, SHIFT
+END
+
+// --- Strings ---
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE     "SampleApp"
+    IDS_HELLO         "Hello from resources"
+END
+
+// --- Dialogs ---
+IDD_MAIN_DIALOG DIALOGEX 0,0,260,140
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Main Dialog"
+FONT 9, "Segoe UI"
+BEGIN
+    LTEXT       "Hello, world!",   IDC_STATIC_TEXT, 7,7,120,8
+    PUSHBUTTON  "OK",              IDC_BTN_OK,      100,110,50,14
+END
+
+IDD_ABOUTBOX DIALOGEX 0,0,160,80
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 9, "Segoe UI"
+BEGIN
+    LTEXT       "About this app",  -1, 7,7,120,8
+    PUSHBUTTON  "OK",              1,  55,50,50,14
+END
